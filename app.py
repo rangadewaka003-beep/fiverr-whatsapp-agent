@@ -81,7 +81,7 @@ HTML_TEMPLATE = """
                 const response = await fetch('/generate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.parse(JSON.stringify({ niche: niche }))
+                    body: JSON.stringify({ niche: niche })
                 });
                 const data = await response.json();
                 if (data.success) {
@@ -107,6 +107,9 @@ def home():
 @app.route("/generate", methods=["POST"])
 def generate():
     data = request.json
+    if not data:
+        return jsonify({"success": False, "error": "Invalid JSON data"}), 400
+        
     niche = data.get("niche", "")
     if not niche:
         return jsonify({"success": False, "error": "Niche is required"}), 400
